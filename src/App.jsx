@@ -6,11 +6,14 @@ import AppRoutes from './routes/routes'
 import useAutorizaciones from './hooks/useAutorizaciones'
 
 function App() {
+
+  const {admin} = useAutorizaciones()
 return (
 <>
-    <Header />
-      <Nav />
-        <AppRoutes />
+    
+    {admin && <Header />}
+    {admin && <Nav />}
+    <AppRoutes />
     <Footer />
 </>
 )
