@@ -22,6 +22,7 @@ const Login = () => {
     if (!password) {
       nuevosErrores.password = 'La contraseña es obligatoria'
     }
+    //
     setErrores(nuevosErrores)
     return Object.keys(nuevosErrores).length === 0
   }
