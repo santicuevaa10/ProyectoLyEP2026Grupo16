@@ -12,6 +12,8 @@ const crearCliente = async (cliente) => {
     return respuesta.data;
 };
 
+
+
 export default {
     crearCliente
 };
