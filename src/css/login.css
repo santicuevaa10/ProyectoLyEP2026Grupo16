@@ -56,6 +56,11 @@ form p{
     font-size:14px;
 }
 
+.campo-error{
+    color: red;
+    min-height: 18px;
+}
+
 form button{
     width:100%;
     background:#d63384;
