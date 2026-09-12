@@ -10,12 +10,6 @@ const DetalleCliente = () => {
   const [cliente, setCliente] = useState(null);
   const [mensaje, setMensaje] = useState("");
 
-  useEffect(() => {
-    fetch(`https://fakestoreapi.com/users/${id}`)
-      .then((res) => res.json())
-      .then((data) => setCliente(data));
-  }, [id]);
-
   const eliminarCliente = async () => {
     try {
       const respuesta = await fetch(
