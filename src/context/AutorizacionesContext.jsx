@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from 'react'
+import { createContext, useState, useEffect, useMemo } from 'react'
 
 export const AutorizacionesContext = createContext()
 
@@ -25,13 +25,17 @@ useEffect(()=>{
 const cerrarSesion=()=>{
   setAdmin(null)
 }
+
+const value = useMemo(
+  () => ({ admin, setAdmin, cerrarSesion}),
+  [admin]
+)
+
 return (
-    <AutorizacionesContext.Provider
-      value={{ admin, setAdmin, cerrarSesion }}
-    >
-      {children}
-    </AutorizacionesContext.Provider>
-  )
+  <AutorizacionesContext.Provider value={value}>
+    {children}
+  </AutorizacionesContext.Provider>
+)
 }
 
 export default AutorizacionesProvider
