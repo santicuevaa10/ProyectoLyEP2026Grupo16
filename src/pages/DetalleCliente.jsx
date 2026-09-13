@@ -1,21 +1,32 @@
 import '../css/detallecliente.css'
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import useAutorizaciones from "../hooks/useAutorizaciones";
 import clientesService from '../services/clientesService';
- 
+
 const DetalleCliente = () => {
  const { id } = useParams();
   const navigate = useNavigate();
-  // COMMIT: "fix: unificar el rol de sesion y quitar el alert() del login"
-  // (antes: const role = localStorage.getItem("role"))
   const { admin } = useAutorizaciones();
   const role = admin?.sector;
 
   const [cliente, setCliente] = useState(null);
-  // COMMIT: "fix: manejar errores de carga en DetalleCliente"
-  // (antes: este estado no existia)
   const [errorCarga, setErrorCarga] = useState(false);
   const [mensaje, setMensaje] = useState("");
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    clientesService
+      .obtenerClientePorId(id, controller.signal)
+      .then((data) => setCliente(data))
+      .catch((err) => {
+        if (err.name === "CanceledError") return;
+        setErrorCarga(true);
+      });
+
+    return () => controller.abort();
+  }, [id]);
 
   const eliminarCliente = async () => {
     try {
@@ -83,8 +94,6 @@ const DetalleCliente = () => {
         <strong>Ciudad:</strong> {cliente.address.city}
       </p>
 
-      {/* COMMIT: "fix: quitar la contraseña del cliente visible en la ficha" */}
-      {/* (titulo cambiado de "Credenciales" a "Cuenta") */}
       <h2>Cuenta</h2>
 
       <p>
@@ -101,3 +110,71 @@ const DetalleCliente = () => {
 };
 
 export default DetalleCliente;
+
+// PROPUESTA DE MEJORA: confirmacion antes de eliminar un cliente (no activa)
+//
+// Hoy el boton "Eliminar Cliente" de arriba borra directo al hacer click,
+// sin preguntar nada: un click accidental (o un dedo que se resbala en el
+// celular) y el cliente desaparece sin vuelta atras. React-Bootstrap ya
+// trae el componente Modal, asi que no hace falta instalar nada nuevo.
+//
+// -----------------------------------------------------------------------
+//
+// import { Modal, Button } from "react-bootstrap";
+//
+// const DetalleClienteConConfirmacion = () => {
+//   // ...mismos estados y useEffect que arriba (cliente, errorCarga, mensaje)...
+//   const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
+//
+//   const confirmarEliminar = async () => {
+//     setMostrarConfirmacion(false);
+//     await eliminarCliente(); // la misma funcion que ya existe arriba
+//   };
+//
+//   return (
+//     <div className="detalle-cliente">
+//       {/* ...resto de la ficha igual... */}
+//
+//       {role?.trim() === "Gerencia" && (
+//         <>
+//           <button
+//             className="btn-eliminar"
+//             onClick={() => setMostrarConfirmacion(true)}
+//           >
+//             Eliminar Cliente
+//           </button>
+//
+//           <Modal
+//             show={mostrarConfirmacion}
+//             onHide={() => setMostrarConfirmacion(false)}
+//           >
+//             <Modal.Header closeButton>
+//               <Modal.Title>Confirmar eliminación</Modal.Title>
+//             </Modal.Header>
+//             <Modal.Body>
+//               ¿Estás seguro que querés eliminar a{" "}
+//               {cliente.name.firstname} {cliente.name.lastname}? Esta
+//               acción no se puede deshacer.
+//             </Modal.Body>
+//             <Modal.Footer>
+//               <Button
+//                 variant="secondary"
+//                 onClick={() => setMostrarConfirmacion(false)}
+//               >
+//                 Cancelar
+//               </Button>
+//               <Button variant="danger" onClick={confirmarEliminar}>
+//                 Sí, eliminar
+//               </Button>
+//             </Modal.Footer>
+//           </Modal>
+//         </>
+//       )}
+//     </div>
+//   );
+// };
+//
+// Con esto, eliminarCliente() (la funcion que ya existe mas arriba en este
+// archivo) queda igual — lo unico que cambia es que ahora se llama desde
+// confirmarEliminar() despues de que el usuario confirma en el modal, en
+// vez de ejecutarse directo al hacer click en el boton.
