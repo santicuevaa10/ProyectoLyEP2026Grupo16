@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const URL = `${import.meta.env.VITE_API_URL}/users`;
+const API_BASE = import.meta.env.VITE_API_URL || "https://fakestoreapi.com";
+const URL = `${API_BASE}/users`;
 
 const obtenerClientes = async (signal) => {
 
