@@ -1,5 +1,3 @@
-// COMMIT: "fix: corregir los 4 errores de ESLint del proyecto"
-// (antes: import { Routes, Route, Navigate } from 'react-router-dom', Navigate sin usar)
 import { Routes, Route } from 'react-router-dom'
 
 import Login from '../pages/Login'

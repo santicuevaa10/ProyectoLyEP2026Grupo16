@@ -70,10 +70,10 @@ const ListaClientes = () => {
         </p>
 
       </div>
-      {/* COMMIT: "fix: hacer responsive la tabla de clientes" */}
-      {/* (antes la tabla no estaba envuelta en este div) */}
+
+
       <div className="tabla-clientes-wrapper">
-      <table className="tabla-clientes">
+        <table className="tabla-clientes">
 
         <thead>
           <tr>
@@ -103,8 +103,6 @@ const ListaClientes = () => {
 
               <td>{cliente.phone}</td>
 
-              {/* COMMIT: "fix: usar optional chaining en el filtro y la tabla de clientes" */}
-              {/* (antes: cliente.address.city sin ?.) */}
               <td>{cliente.address?.city}</td>
 
               <td>
@@ -123,7 +121,7 @@ const ListaClientes = () => {
 
       </table>
       </div>
-      {/* fin del wrapper de "fix: hacer responsive la tabla de clientes" */}
+      
 
     </div>
   );

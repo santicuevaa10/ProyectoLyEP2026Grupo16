@@ -1,13 +1,8 @@
 import '../css/detallecliente.css'
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-// COMMIT: "fix: unificar el rol de sesion y quitar el alert() del login"
-// (antes: este import no existia, el rol se leia con localStorage.getItem("role"))
-import useAutorizaciones from "../hooks/useAutorizaciones";
-// COMMIT: "refactor: centralizar llamadas HTTP en clientesService"
-// (antes: este import no existia, se usaba fetch directo a la API)
-import clientesService from "../services/clientesService";
-
+import clientesService from '../services/clientesService';
+ 
 const DetalleCliente = () => {
  const { id } = useParams();
   const navigate = useNavigate();
@@ -31,15 +26,16 @@ const DetalleCliente = () => {
       setTimeout(() => {
         navigate("/clientes");
       }, 2000);
+
     } catch {
-      // COMMIT: "fix: corregir los 4 errores de ESLint del proyecto"
-      // (antes: catch (error) { ... } con 'error' sin usar)
       setMensaje("Error al eliminar cliente");
     }
   };
-  if (errorCarga) {
-    return <h2>No se pudo cargar la información del cliente.</h2>;
+
+  if(errorCarga){
+    return <h2>No se pudo cargar la informacion del cliente.Error al cargar el cliente</h2>
   }
+
 
   if (!cliente) {
     return <h2>Cargando cliente...</h2>;
@@ -94,8 +90,6 @@ const DetalleCliente = () => {
       <p>
         <strong>Usuario:</strong> {cliente.username}
       </p>
-      {/* COMMIT: "fix: quitar la contraseña del cliente visible en la ficha" */}
-      {/* (aca antes habia un <p><strong>Contraseña:</strong> {cliente.password}</p>, eliminado) */}
 
       {role?.trim() === "Gerencia" && (
         <button className='btn-eliminar'onClick={eliminarCliente}>
