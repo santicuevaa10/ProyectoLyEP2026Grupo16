@@ -22,7 +22,7 @@ const Login = () => {
     if (!password) {
       nuevosErrores.password = 'La contraseña es obligatoria'
     } 
-    
+
     setErrores(nuevosErrores)
     return Object.keys(nuevosErrores).length === 0
   }
@@ -50,24 +50,28 @@ const Login = () => {
     <div className="login-container">
       <h1>Iniciar Sesión</h1>
       <form onSubmit={manejarSubmit}>
-        <label>Email:</label>
-        <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <p style={{ color: 'red', minHeight: '18px' }}>
-          {errores.email || ' '}
+        <label htmlFor="email">Email:</label>
+        <input
+         id="email"
+         type="text"
+         value={email}
+         onChange={(e) => setEmail (e.target.value)}
+        />
+      <p className="campo-error" aria-live="polite">
+        {errores.email || ' ' }
+      </p>
+        <label htmlFor='password'>Contraseña:</label>
+        <input 
+         id="password"
+         type="password"
+         value={password}
+         onChange={(e) => setPassword(e.target.value)}
+        />
+        <p className="campo-error" aria-live="polite">
+          {errores.password || ' ' }
         </p>
-        <label>Contraseña:</label>
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        <p style={{ color: 'red', minHeight: '18px' }}>
-          {errores.password || ' '}
-        </p>
-        <label>Sector:</label>
-        <select value={sector} onChange={(e) => setSector(e.target.value)}>
-          <option value="">Seleccione un sector</option>
-          <option value="Soporte">Soporte</option>
-          <option value="Gerencia">Gerencia</option>
-        </select>
-        <p style={{ color: 'red', minHeight: '18px' }}>
-          {errores.sector || ' '}
+        <p className="campo-error" aria-live="polite">
+          {errorLogin || ' ' }
         </p>
         <button type="submit">Ingresar</button>
       </form>
