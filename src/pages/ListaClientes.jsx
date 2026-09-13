@@ -72,7 +72,10 @@ const ListaClientes = () => {
         </p>
 
       </div>
-      <table className="tabla-clientes">
+
+
+      <div className="tabla-clientes-wrapper">
+        <table className="tabla-clientes">
 
         <thead>
           <tr>
@@ -100,7 +103,7 @@ const ListaClientes = () => {
 
               <td>{cliente.phone}</td>
 
-              <td>{cliente.address.city}</td>
+              <td>{cliente.address?.city}</td>
 
               <td>
                 <Link
@@ -117,6 +120,8 @@ const ListaClientes = () => {
         </tbody>
 
       </table>
+      </div>
+      
 
     </div>
   );
