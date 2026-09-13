@@ -102,3 +102,56 @@ const DetalleCliente = () => {
 };
 
 export default DetalleCliente;
+
+import { Modal, Button } from "react-bootstrap";
+
+ const DetalleClienteConConfirmacion = () => {
+   const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
+
+   const confirmarEliminar = async () => {
+     setMostrarConfirmacion(false);
+     await eliminarCliente(); // la misma funcion que ya existe arriba
+   };
+
+   return (
+     <div className="detalle-cliente">
+       {/* ...resto de la ficha igual... */}
+
+       {role?.trim() === "Gerencia" && (
+         <>
+           <button
+             className="btn-eliminar"
+             onClick={() => setMostrarConfirmacion(true)}
+           >
+             Eliminar Cliente
+           </button>
+
+           <Modal
+             show={mostrarConfirmacion}
+             onHide={() => setMostrarConfirmacion(false)}
+           >
+             <Modal.Header closeButton>
+               <Modal.Title>Confirmar eliminación</Modal.Title>
+             </Modal.Header>
+             <Modal.Body>
+               ¿Estás seguro que querés eliminar a{" "}
+               {cliente.name.firstname} {cliente.name.lastname}? Esta
+               acción no se puede deshacer.
+             </Modal.Body>
+             <Modal.Footer>
+               <Button
+                 variant="secondary"
+                 onClick={() => setMostrarConfirmacion(false)}
+               >
+                 Cancelar
+               </Button>
+               <Button variant="danger" onClick={confirmarEliminar}>
+                 Sí, eliminar
+               </Button>
+             </Modal.Footer>
+           </Modal>
+         </>
+       )}
+     </div>
+   );
+ };
