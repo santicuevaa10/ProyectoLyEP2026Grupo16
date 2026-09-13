@@ -14,6 +14,14 @@ const useClientes = () => {
     clientesService
       .obtenerClientes(controller.signal)
       .then((data) => {
+        // Si la API responde algo que no es un array (por ejemplo, HTML
+        // en vez de JSON cuando VITE_API_URL esta mal configurada), se
+        // trata como error en vez de romper el .filter() de ListaClientes.
+        if (!Array.isArray(data)) {
+          setError(true);
+          setLoading(false);
+          return;
+        }
         setClientes(data);
         setLoading(false);
       })

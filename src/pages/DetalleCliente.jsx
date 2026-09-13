@@ -1,21 +1,32 @@
 import '../css/detallecliente.css'
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import useAutorizaciones from "../hooks/useAutorizaciones";
 import clientesService from '../services/clientesService';
- 
+
 const DetalleCliente = () => {
  const { id } = useParams();
   const navigate = useNavigate();
-  // COMMIT: "fix: unificar el rol de sesion y quitar el alert() del login"
-  // (antes: const role = localStorage.getItem("role"))
   const { admin } = useAutorizaciones();
   const role = admin?.sector;
 
   const [cliente, setCliente] = useState(null);
-  // COMMIT: "fix: manejar errores de carga en DetalleCliente"
-  // (antes: este estado no existia)
   const [errorCarga, setErrorCarga] = useState(false);
   const [mensaje, setMensaje] = useState("");
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    clientesService
+      .obtenerClientePorId(id, controller.signal)
+      .then((data) => setCliente(data))
+      .catch((err) => {
+        if (err.name === "CanceledError") return;
+        setErrorCarga(true);
+      });
+
+    return () => controller.abort();
+  }, [id]);
 
   const eliminarCliente = async () => {
     try {
@@ -83,8 +94,6 @@ const DetalleCliente = () => {
         <strong>Ciudad:</strong> {cliente.address.city}
       </p>
 
-      {/* COMMIT: "fix: quitar la contraseña del cliente visible en la ficha" */}
-      {/* (titulo cambiado de "Credenciales" a "Cuenta") */}
       <h2>Cuenta</h2>
 
       <p>
