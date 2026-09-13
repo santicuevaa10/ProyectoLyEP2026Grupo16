@@ -11,25 +11,8 @@ form .form-control{
 }
 
 form .form-control:focus{
-    border-color:#d63384;
-    box-shadow:0px 0px 10px rgba(214,51,132,.18);
-}
-
-/* COMMIT: "fix: el boton Guardar Cliente respeta el color de marca" */
-/* (antes: "form button" sin ".btn-primary", le perdia en especificidad
-   a la clase .btn-primary de Bootstrap y el boton quedaba azul;
-   tambien se agrego border-color, antes solo tenia border:none) */
-form button.btn-primary{
-    width:100%;
-    margin-top:10px;
-    background:#d63384;
-    border-color:#d63384;
-}
-
-form button.btn-primary:hover,
-form button.btn-primary:focus{
-    background:#c2185b;
-    border-color:#c2185b;
+    border-color:#337fd6;
+    box-shadow:0px 0px 10px #d633842e;
 }
 
 .alert{

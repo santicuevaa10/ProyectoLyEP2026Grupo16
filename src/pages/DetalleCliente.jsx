@@ -22,32 +22,6 @@ const DetalleCliente = () => {
   const [errorCarga, setErrorCarga] = useState(false);
   const [mensaje, setMensaje] = useState("");
 
-  // El useEffect de abajo paso por 3 commits distintos:
-  // COMMIT: "fix: manejar errores de carga en DetalleCliente"
-  // (antes: fetch(...).then(res => res.json()).then(data => setCliente(data)),
-  // sin chequear res.ok ni tener .catch())
-  // COMMIT: "fix: cancelar peticiones fetch al desmontar o cambiar de cliente"
-  // (antes: no habia AbortController ni return () => controller.abort())
-  // COMMIT: "refactor: centralizar llamadas HTTP en clientesService"
-  // (antes: fetch(`https://fakestoreapi.com/users/${id}`, { signal }) directo;
-  // ahora usa clientesService.obtenerClientePorId, por eso el catch chequea
-  // "CanceledError" (axios) en vez de "AbortError" (fetch))
-  useEffect(() => {
-    const controller = new AbortController();
-
-    clientesService
-      .obtenerClientePorId(id, controller.signal)
-      .then((data) => setCliente(data))
-      .catch((err) => {
-        if (err.name === "CanceledError") return;
-        setErrorCarga(true);
-      });
-
-    return () => controller.abort();
-  }, [id]);
-
-  // COMMIT: "refactor: centralizar llamadas HTTP en clientesService"
-  // (antes hacia un fetch DELETE directo a la API)
   const eliminarCliente = async () => {
     try {
       await clientesService.eliminarCliente(id);

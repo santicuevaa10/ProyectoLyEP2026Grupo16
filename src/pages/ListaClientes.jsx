@@ -16,6 +16,10 @@ const ListaClientes = () => {
   // "refactor: centralizar llamadas HTTP en clientesService" (11))
   const { clientes, loading, error, agregarCliente } = useClientes();
   const [busqueda, setBusqueda] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+
 
   // COMMIT: "fix: usar optional chaining en el filtro y la tabla de clientes"
   // (antes: cliente.name.lastname.toLowerCase()... sin los ?.)
