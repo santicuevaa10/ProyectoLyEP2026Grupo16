@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const URL = "https://fakestoreapi.com/users";
+
 
 const crearCliente = async (cliente) => {
 
