@@ -7,8 +7,8 @@ import AutorizacionesService from '../services/autorizacionesServices'
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [sector, setSector] = useState('')
   const [errores, setErrores] = useState({})
+  const [errorLogin, setErrorLogin] = useState('')
   const { setAdmin } = useAutorizaciones()
   const navigate = useNavigate()
   const validar = () => {
@@ -28,17 +28,13 @@ const Login = () => {
   }
   const manejarSubmit = (e) => {
     e.preventDefault()
+    setErrorLogin('')
     if (!validar()) return
-    const usuario = AutorizacionesService.login(
-      email,
-      password,
-      sector
-    )
+    const usuario = AutorizacionesService.login(email, password)
     if (!usuario) {
-     alert('Verifique los datos')
+      setErrorLogin('Verifique los datos ingresados')
       return
     }
-    localStorage.setItem("role", usuario.sector)
     setAdmin({
       nombre: usuario.nombre,
       email: usuario.email,
@@ -79,3 +75,56 @@ const Login = () => {
   )
 }
 export default Login
+
+//mejora
+
+ import { useForm } from 'react-hook-form'
+ import { zodResolver } from '@hookform/resolvers/zod'
+ import { z } from 'zod'
+
+ const esquemaLogin = z.object({
+   email: z.string().min(1, 'El email es obligatorio').email('Email inválido'),
+   password: z.string().min(1, 'La contraseña es obligatoria'),
+ })
+
+ const LoginConRHF = () => {
+   const [errorLogin, setErrorLogin] = useState('')
+   const { setAdmin } = useAutorizaciones()
+   const navigate = useNavigate()
+   const {
+     register,
+     handleSubmit,
+     formState: { errors },
+   } = useForm({ resolver: zodResolver(esquemaLogin) })
+
+   const onSubmit = ({ email, password }) => {
+     setErrorLogin('')
+     const usuario = AutorizacionesService.login(email, password)
+     if (!usuario) {
+       setErrorLogin('Verifique los datos')
+       return
+     }
+     setAdmin({ nombre: usuario.nombre, email: usuario.email, sector: usuario.sector })
+     navigate('/')
+   }
+
+   return (
+     <div className="login-container">
+       <h1>Iniciar Sesión</h1>
+       <form onSubmit={handleSubmit(onSubmit)}>
+         <label htmlFor="email">Email:</label>
+         <input id="email" {...register('email')} />
+         <p className="campo-error" aria-live="polite">
+           {errors.email?.message || ' '}
+         </p>
+         <label htmlFor="password">Contraseña:</label>
+         <input id="password" type="password" {...register('password')} />
+         <p className="campo-error" aria-live="polite">
+           {errors.password?.message || ' '}
+         </p>
+         <p className="campo-error" aria-live="polite">{errorLogin || ' '}</p>
+         <button type="submit">Ingresar</button>
+       </form>
+     </div>
+   )
+ }

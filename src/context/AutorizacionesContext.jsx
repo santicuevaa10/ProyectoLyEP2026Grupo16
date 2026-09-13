@@ -3,22 +3,22 @@ import { createContext, useState, useEffect, useMemo } from 'react'
 export const AutorizacionesContext = createContext()
 
 const AutorizacionesProvider = ({ children }) => {
-
-  const [admin, setAdmin] = useState(()=>{
-    const adminGuardado= localStorage.getItem('admin')
-    if(adminGuardado){
+  const [admin, setAdmin] = useState(() => {
+    const adminGuardado = localStorage.getItem('admin')
+    if (adminGuardado) {
       return JSON.parse(adminGuardado)
     }
     return null
   })
-useEffect(()=>{
-  if(admin){
-    localStorage.setItem(
-      'admin',
-      JSON.stringify(admin)
-    )
-  }else{
-    localStorage.removeItem('admin')
+  useEffect(() => {
+    if (admin) {
+      localStorage.setItem('admin', JSON.stringify(admin))
+    } else {
+      localStorage.removeItem('admin')
+    }
+  }, [admin])
+  const cerrarSesion = () => {
+    setAdmin(null)
   }
 
 },[admin])
