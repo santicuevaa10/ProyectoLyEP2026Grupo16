@@ -1,5 +1,6 @@
-import { useState, useEffect, useMemo } from 'react'
-import { AutorizacionesContext } from './autorizacionesContextObject'
+import { createContext, useState, useEffect, useMemo } from 'react'
+
+export const AutorizacionesContext = createContext()
 
 const AutorizacionesProvider = ({ children }) => {
   const [admin, setAdmin] = useState(() => {
@@ -20,13 +21,21 @@ const AutorizacionesProvider = ({ children }) => {
     setAdmin(null)
   }
 
-  const value = useMemo(() => ({ admin, setAdmin, cerrarSesion }), [admin])
+},[admin])
+const cerrarSesion=()=>{
+  setAdmin(null)
+}
 
-  return (
-    <AutorizacionesContext.Provider value={value}>
-      {children}
-    </AutorizacionesContext.Provider>
-  )
+const value = useMemo(
+  () => ({ admin, setAdmin, cerrarSesion}),
+  [admin]
+)
+
+return (
+  <AutorizacionesContext.Provider value={value}>
+    {children}
+  </AutorizacionesContext.Provider>
+)
 }
 
 export default AutorizacionesProvider

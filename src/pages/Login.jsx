@@ -21,8 +21,8 @@ const Login = () => {
     }
     if (!password) {
       nuevosErrores.password = 'La contraseña es obligatoria'
-    }
-    //
+    } 
+
     setErrores(nuevosErrores)
     return Object.keys(nuevosErrores).length === 0
   }
@@ -48,26 +48,26 @@ const Login = () => {
       <form onSubmit={manejarSubmit}>
         <label htmlFor="email">Email:</label>
         <input
-          id="email"
-          type="text"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+         id="email"
+         type="text"
+         value={email}
+         onChange={(e) => setEmail (e.target.value)}
+        />
+      <p className="campo-error" aria-live="polite">
+        {errores.email || ' ' }
+      </p>
+        <label htmlFor='password'>Contraseña:</label>
+        <input 
+         id="password"
+         type="password"
+         value={password}
+         onChange={(e) => setPassword(e.target.value)}
         />
         <p className="campo-error" aria-live="polite">
-          {errores.email || ' '}
-        </p>
-        <label htmlFor="password">Contraseña:</label>
-        <input
-          id="password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <p className="campo-error" aria-live="polite">
-          {errores.password || ' '}
+          {errores.password || ' ' }
         </p>
         <p className="campo-error" aria-live="polite">
-          {errorLogin || ' '}
+          {errorLogin || ' ' }
         </p>
         <button type="submit">Ingresar</button>
       </form>
