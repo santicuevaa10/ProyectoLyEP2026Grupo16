@@ -1,6 +1,7 @@
 import '../css/detallecliente.css'
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import clientesService from '../services/clientesService';
  
 const DetalleCliente = () => {
  const { id } = useParams();
@@ -18,24 +19,24 @@ const DetalleCliente = () => {
 
   const eliminarCliente = async () => {
     try {
-      const respuesta = await fetch(
-        `https://fakestoreapi.com/users/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      await clientesService.eliminarCliente(id);
 
-      if (respuesta.ok) {
-        setMensaje("Cliente eliminado correctamente");
+      setMensaje("Cliente eliminado correctamente");
 
-        setTimeout(() => {
-          navigate("/clientes");
-        }, 2000);
-      }
-    } catch (error) {
+      setTimeout(() => {
+        navigate("/clientes");
+      }, 2000);
+
+    } catch {
       setMensaje("Error al eliminar cliente");
     }
   };
+
+  if(errorCarga){
+    return <h2>No se pudo cargar la informacion del cliente.Error al cargar el cliente</h2>
+  }
+
+
   if (!cliente) {
     return <h2>Cargando cliente...</h2>;
   }
